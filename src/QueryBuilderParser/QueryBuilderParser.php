@@ -243,16 +243,15 @@ class QueryBuilderParser
          */
         $sqlOperator = $this->operator_sql[$rule->operator];
         $operator = $sqlOperator['operator'];
-        $condition = strtolower($queryCondition);
 
         if ($this->operatorRequiresArray($operator)) {
-            return $this->makeQueryWhenArray($query, $rule, $sqlOperator, $value, $condition);
+            return $this->makeQueryWhenArray($query, $rule, $sqlOperator, $value, $queryCondition);
         }
 
         $whereSql = 'e.'.$rule->field.' '.$sqlOperator['operator'].' :'.$rule->field.'';
 
         return $this
-            ->addWhere($query, $whereSql, $condition)
+            ->addWhere($query, $whereSql, $queryCondition)
             ->setParameter($rule->field, $value);
     }
 
