@@ -1,6 +1,6 @@
 <?php
 
-namespace timgws;
+namespace gadelat;
 
 class QBRuleException extends \Exception
 {

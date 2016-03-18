@@ -1,26 +1,24 @@
 <?php
-namespace timgws\test;
-
-use timgws\QBParseException;
+namespace gadelat\test;
 
 /**
  * Class QBPFunctionsTests
  *
  * Uses reflection to get to one particularly
  *
- * @package timgws\test
+ * @package gadelat\test
  */
 class QBPFunctionsTests extends CommonQueryBuilderTests
 {
     protected static function getMethod($name) {
-        $class = new \ReflectionClass('\timgws\QueryBuilderParser');
+        $class = new \ReflectionClass('\gadelat\QueryBuilderParser');
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;
     }
 
     /**
-     * @expectedException \timgws\QBParseException
+     * @expectedException \gadelat\QBParseException
      * @expectedExceptionMessage makeQueryWhenArray could not return a value
      */
     public function testOperatorNotValid()

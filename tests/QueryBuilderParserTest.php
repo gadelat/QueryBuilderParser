@@ -1,6 +1,6 @@
 <?php
 
-namespace timgws\test;
+namespace gadelat\test;
 
 use Illuminate\Database\Query\Builder;
 
@@ -58,7 +58,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
     }
 
     /**
-     * @expectedException \timgws\QBParseException
+     * @expectedException \gadelat\QBParseException
      * @expectedExceptionMessage Field (category) should not be an array, but it is.
      */
     public function testCategoryInvalidArray()
@@ -152,7 +152,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
     }
 
     /**
-     * @expectedException \timgws\QBParseException
+     * @expectedException \gadelat\QBParseException
      */
     public function testJSONParseException()
     {
@@ -293,7 +293,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
     }
 
     /**
-     * @expectedException timgws\QBParseException
+     * @expectedException gadelat\QBParseException
      * @expectedMessage Field (price) should not be an array, but it is.
      */
     public function testInputIsNotArray()
@@ -324,7 +324,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
     }
 
     /**
-     * @expectedException \timgws\QBParseException
+     * @expectedException \gadelat\QBParseException
      * @expectedExceptionMessage Field (price) does not exist in fields list
      */
     public function testFieldNotInittedNotAllowed()
@@ -335,7 +335,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
     }
 
     /**
-     * @expectedException \timgws\QBParseException
+     * @expectedException \gadelat\QBParseException
      * @expectedExceptionMessage Field (price) should be an array, but it isn't.
      */
     public function testBetweenMustBeArray($validJSON = true)
@@ -354,7 +354,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
     }
 
     /**
-     * @expectedException \timgws\QBParseException
+     * @expectedException \gadelat\QBParseException
      * @expectedExceptionMessage JSON parsing threw an error
      */
     public function testThrowExceptionInvalidJSON()
@@ -366,7 +366,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
      * This is a similar test to testBetweenOperator, however, this will throw an exception if
      * there is more then two values for the 'BETWEEN' operator.
      *
-     * @expectedException \timgws\QBParseException
+     * @expectedException \gadelat\QBParseException
      */
     public function testBetweenOperatorThrowsException()
     {
@@ -382,7 +382,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
      * Make sure an exception is thrown if the JSON is valid, but after parsing,
      * we don't get back an object
      *
-     * @expectedException \timgws\QBParseException
+     * @expectedException \gadelat\QBParseException
      */
     public function testArrayDoesNotParse()
     {
@@ -413,7 +413,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
 
     public function testQueryContains()
     {
-        $some_json_input = '{"condition":"AND","rules":[{"id":"name","field":"name","type":"string","input":"text","operator":"contains","value":"Johnny"},{"condition":"AND","rules":[{"id":"category","field":"category","type":"integer","input":"select","operator":"equal","value":"2"},{"id":"in_stock","field":"in_stock","type":"integer","input":"radio","operator":"equal","value":"1"},{"condition":"OR","rules":[{"id":"name","field":"name","type":"string","input":"text","operator":"begins_with","value":"tim"},{"id":"name","field":"name","type":"string","input":"text","operator":"contains","value":"timgws"}]},{"condition":"OR","rules":[{"id":"name","field":"name","type":"string","input":"text","operator":"ends_with","value":"builder"},{"id":"name","field":"name","type":"string","input":"text","operator":"contains","value":"qbp"},{"id":"name","field":"name","type":"string","input":"text","operator":"begins_with","value":"query"}]}]}]}';
+        $some_json_input = '{"condition":"AND","rules":[{"id":"name","field":"name","type":"string","input":"text","operator":"contains","value":"Johnny"},{"condition":"AND","rules":[{"id":"category","field":"category","type":"integer","input":"select","operator":"equal","value":"2"},{"id":"in_stock","field":"in_stock","type":"integer","input":"radio","operator":"equal","value":"1"},{"condition":"OR","rules":[{"id":"name","field":"name","type":"string","input":"text","operator":"begins_with","value":"tim"},{"id":"name","field":"name","type":"string","input":"text","operator":"contains","value":"gadelat"}]},{"condition":"OR","rules":[{"id":"name","field":"name","type":"string","input":"text","operator":"ends_with","value":"builder"},{"id":"name","field":"name","type":"string","input":"text","operator":"contains","value":"qbp"},{"id":"name","field":"name","type":"string","input":"text","operator":"begins_with","value":"query"}]}]}]}';
 
         $builder = $this->createQueryBuilder();
         $qb = $this->getParserUnderTest();
@@ -429,7 +429,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
     /**
      * QBP should successfully parse OR conditions.
      *
-     * @throws \timgws\QBParseException
+     * @throws \gadelat\QBParseException
      */
     public function testNestedOrGroup()
     {
@@ -447,8 +447,8 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
     }
 
     /**
-     * @throws \timgws\QBParseException
-     * @expectedException \timgws\QBParseException
+     * @throws \gadelat\QBParseException
+     * @expectedException \gadelat\QBParseException
      * @expectedExceptionMessage Condition can only be one of: 'and', 'or'.
      */
     public function testIncorrectCondition()
