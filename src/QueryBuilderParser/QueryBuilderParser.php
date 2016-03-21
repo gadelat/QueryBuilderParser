@@ -244,11 +244,22 @@ class QueryBuilderParser
         $sqlOperator = $this->operator_sql[$rule->operator];
         $operator = $sqlOperator['operator'];
 
+
         if ($this->operatorRequiresArray($operator)) {
-            return $this->makeQueryWhenArray($query, $rule, $sqlOperator, $value, $queryCondition);
+            return $this->makeQueryWhenArray($query, $rule, $operator, $value, $queryCondition);
         }
 
-        $whereSql = 'e.'.$rule->field.' '.$sqlOperator['operator'].' :'.$rule->field.'';
+        $em = $query->getEntityManager();
+        $meta = $em->getClassMetadata($query->getRootEntities()[0]);
+
+        // "contains" applies for both string and *:N fields, so this is for differing them
+        if ($rule->operator == 'contains' && in_array($rule->field, $meta->getAssociationNames())) {
+            return $this
+                ->addWhere($query, ':'.$rule->field.' MEMBER OF e.'.$rule->field, $queryCondition)
+                ->setParameter($rule->field, $rule->value);
+        }
+
+        $whereSql = 'e.'.$rule->field.' '.$operator.' :'.$rule->field.'';
 
         return $this
             ->addWhere($query, $whereSql, $queryCondition)

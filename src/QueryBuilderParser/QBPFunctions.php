@@ -242,11 +242,11 @@ trait QBPFunctions
      *
      * @return QueryBuilder
      */
-    protected function makeQueryWhenArray(QueryBuilder $query, stdClass $rule, array $sqlOperator, array $value, $condition)
+    protected function makeQueryWhenArray(QueryBuilder $query, stdClass $rule, $sqlOperator, array $value, $condition)
     {
-        if ($sqlOperator['operator'] == 'IN' || $sqlOperator['operator'] == 'NOT IN') {
-            return $this->makeArrayQueryIn($query, $rule, $sqlOperator['operator'], $value, $condition);
-        } elseif ($sqlOperator['operator'] == 'BETWEEN') {
+        if ($sqlOperator == 'IN' || $sqlOperator == 'NOT IN') {
+            return $this->makeArrayQueryIn($query, $rule, $sqlOperator, $value, $condition);
+        } elseif ($sqlOperator == 'BETWEEN') {
             return $this->makeArrayQueryBetween($query, $rule, $value, $condition);
         }
 
