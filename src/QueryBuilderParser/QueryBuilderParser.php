@@ -253,9 +253,9 @@ class QueryBuilderParser
         $meta = $em->getClassMetadata($query->getRootEntities()[0]);
 
         // "contains" applies for both string and *:N fields, so this is for differing them
-        if ($rule->operator == 'contains' && in_array($rule->field, $meta->getAssociationNames())) {
+        if (in_array($rule->operator, ['contains', 'not_contains']) && in_array($rule->field, $meta->getAssociationNames())) {
             return $this
-                ->addWhere($query, ':'.$rule->field.' MEMBER OF e.'.$rule->field, $queryCondition)
+                ->addWhere($query, ':'.$rule->field.($rule->operator == 'contains' ? '' : ' NOT').' MEMBER OF e.'.$rule->field, $queryCondition)
                 ->setParameter($rule->field, $rule->value);
         }
 
