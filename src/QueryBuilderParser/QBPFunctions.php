@@ -51,8 +51,8 @@ trait QBPFunctions
         'not_ends_with'    => array ('operator' => 'NOT LIKE', 'append' => '%'),
         'is_empty'         => array ('operator' => '='),
         'is_not_empty'     => array ('operator' => '!='),
-        'is_null'          => array ('operator' => 'NULL'),
-        'is_not_null'      => array ('operator' => 'NOT NULL')
+        'is_null'          => array ('operator' => 'IS NULL'),
+        'is_not_null'      => array ('operator' => 'IS NOT NULL')
     );
 
     protected $needs_array = array(

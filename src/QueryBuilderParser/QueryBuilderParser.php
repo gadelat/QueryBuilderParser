@@ -259,11 +259,14 @@ class QueryBuilderParser
                 ->setParameter($rule->field, $rule->value);
         }
 
-        $whereSql = 'e.'.$rule->field.' '.$operator.' :'.$rule->field.'';
+        $whereSql = 'e.'.$rule->field.' '.$operator;
 
-        return $this
-            ->addWhere($query, $whereSql, $queryCondition)
-            ->setParameter($rule->field, $value);
+        if ($value !== null) {
+            $whereSql .= ' :'.$rule->field.'';
+            $query->setParameter($rule->field, $value);
+        }
+
+        return $this->addWhere($query, $whereSql, $queryCondition);
     }
 
     /**
