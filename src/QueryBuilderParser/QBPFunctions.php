@@ -254,6 +254,38 @@ trait QBPFunctions
     }
 
     /**
+     * makeQuery, for *:N fields
+     *
+     * @param QueryBuilder $query
+     * @param stdClass $rule
+     * @param $sqlOperator
+     * @param $value
+     * @param $condition
+     * @return QueryBuilder
+     * @throws QBParseException
+     */
+    protected function makeQueryWhenMany(QueryBuilder $query, stdClass $rule, $sqlOperator, $value, $condition)
+    {
+        if (in_array($rule->operator, ['contains', 'not_contains'])) {
+            $whereDQL = ':'.$rule->field.($rule->operator == 'contains' ? '' : ' NOT').' MEMBER OF e.'.$rule->field;
+            $query->setParameter($rule->field, $value);
+        }
+        elseif (in_array($rule->operator, ['is_null', 'is_not_null'])) {
+            if ($rule->operator == 'is_not_null') {
+                $query->leftJoin('e.'.$rule->field, $rule->field);
+            } else {
+                $query->innerJoin('e.'.$rule->field, $rule->field);
+            }
+            $whereDQL = $rule->field.'.id '.$sqlOperator;
+        }
+        else {
+            throw new QBParseException('Invalid operation for association');
+        }
+
+        return $this->addWhere($query, $whereDQL, $condition);
+    }
+
+    /**
      * makeArrayQueryIn, when the query is an IN or NOT IN...
      *
      * @see makeQueryWhenArray

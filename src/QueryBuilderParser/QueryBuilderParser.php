@@ -2,6 +2,7 @@
 
 namespace gadelat;
 
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use \stdClass;
 use Doctrine\ORM\QueryBuilder;
 
@@ -251,12 +252,15 @@ class QueryBuilderParser
 
         $em = $query->getEntityManager();
         $meta = $em->getClassMetadata($query->getRootEntities()[0]);
+        $isAssociation = isset($meta->getAssociationMappings()[$rule->field]);
 
-        // "contains" applies for both string and *:N fields, so this is for differing them
-        if (in_array($rule->operator, ['contains', 'not_contains']) && in_array($rule->field, $meta->getAssociationNames())) {
-            return $this
-                ->addWhere($query, ':'.$rule->field.($rule->operator == 'contains' ? '' : ' NOT').' MEMBER OF e.'.$rule->field, $queryCondition)
-                ->setParameter($rule->field, $rule->value);
+        // *:N
+        if ($isAssociation && in_array(
+                $meta->getAssociationMappings()[$rule->field]['type'],
+                [ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY]
+            )
+        ) {
+            return $this->makeQueryWhenMany($query, $rule, $operator, $value, $queryCondition);
         }
 
         $whereSql = 'e.'.$rule->field.' '.$operator;
