@@ -6,6 +6,7 @@ use \stdClass;
 
 trait QBPFunctions
 {
+    protected $dateFormat ='d/m/Y';
     /**
      * @param stdClass $rule
      */
@@ -59,6 +60,13 @@ trait QBPFunctions
         'IN', 'NOT IN', 'BETWEEN',
     );
 
+    public function setDateFormat($dateFormat)
+    {
+        $this->dateFormat = $dateFormat;
+
+        return $this;
+    }
+
     /**
      * Determine if an operator (LIKE/IN) requires an array.
      *
@@ -107,6 +115,35 @@ trait QBPFunctions
         }
 
         return $value;
+    }
+
+    /**
+     * If input value looks to be in date format we expect, convert it to datetime object(s)
+     * TODO: no support for actual datetime, only date for now
+     *
+     * @param stdClass $rule
+     * @param $values
+     * @return mixed Returns $values, or \DateTime, or \DateTime[]
+     */
+    public function detectAndConvertDate(stdClass $rule, $values)
+    {
+        $operatorMayBeDate = in_array('datetime', $this->operators[$rule->operator]['apply_to']);
+        $firstValueLooksLikeDate = \DateTime::createFromFormat(
+            $this->dateFormat,
+            is_array($values) ? $values[0] : $values[0]
+        );
+
+        // nope, not a date. Return original value
+        if (!$operatorMayBeDate || !$firstValueLooksLikeDate) {
+            return $values;
+        }
+
+        // there are some dates, let's convert all of it to \DateTime
+        foreach ((array)$values as $key => $subValue) {
+            $values[$key] = \DateTime::createFromFormat($this->dateFormat, $subValue)->setTime(0, 0);
+        }
+
+        return count($values) == 1 ? $values[0] : $values;
     }
 
     /**

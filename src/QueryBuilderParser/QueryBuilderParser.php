@@ -186,6 +186,7 @@ class QueryBuilderParser
         $requireArray = $this->operatorRequiresArray($operator);
 
         $value = $this->enforceArrayOrString($requireArray, $value, $field);
+        $value = $this->detectAndConvertDate($rule, $value);
 
         return $this->appendOperatorIfRequired($requireArray, $value, $sqlOperator);
     }
