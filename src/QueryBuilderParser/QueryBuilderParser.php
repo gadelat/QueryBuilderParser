@@ -159,15 +159,11 @@ class QueryBuilderParser
      */
     protected function operatorValueWhenNotAcceptingOne(stdClass $rule)
     {
-        $value = null;
-
-        if ($this->operators[$rule->operator]['accept_values'] === false) {
-            if ($rule->operator == 'is_empty' || $rule->operator == 'is_not_empty') {
-                $value = '';
-            }
+        if ($rule->operator == 'is_empty' || $rule->operator == 'is_not_empty') {
+            return '';
         }
 
-        return $value;
+        return null;
     }
 
     /**
