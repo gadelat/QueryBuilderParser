@@ -2,13 +2,10 @@
 
 namespace gadelat\test;
 
-use Illuminate\Database\Connection as Connection;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\Grammars\MySqlGrammar as MySQLGrammar;
-use Illuminate\Database\Query\Processors\MySqlProcessor as MySQLProcessor;
+use Doctrine\Tests\OrmTestCase;
 use gadelat\QueryBuilderParser;
 
-class CommonQueryBuilderTests extends \PHPUnit_Framework_TestCase
+abstract class CommonQueryBuilderTests extends OrmTestCase
 {
     protected $simpleQuery = '{"condition":"AND","rules":[{"id":"price","field":"price","type":"double","input":"text","operator":"less","value":"10.25"}]}';
     protected $json1 = '{
@@ -57,10 +54,7 @@ class CommonQueryBuilderTests extends \PHPUnit_Framework_TestCase
 
     protected function createQueryBuilder()
     {
-        $pdo = new \PDO('sqlite::memory:');
-        $builder = new Builder(new Connection($pdo), new MySQLGrammar(), new MySQLProcessor());
-
-        return $builder;
+        return $this->_getTestEntityManager()->getRepository('gadelat\test\Entity\Opportunity')->createQueryBuilder('e');
     }
 
     protected function makeJSONForInNotInTest($operator = 'in')

@@ -8,10 +8,6 @@
   <testsuite name="MySQL">
     <directory suffix="Test.php">tests</directory>
   </testsuite>
-
-  <testsuite name="MongoDB">
-    <directory suffix="MongoDB.php">tests/mongodb</directory>
-  </testsuite>
  </testsuites>
 
   <filter>

@@ -14,9 +14,13 @@
     "autoload": {
         "psr-4": {
           "gadelat\\": "src/QueryBuilderParser/",
-          "gadelat\\test\\": "tests/"
+          "gadelat\\test\\": "tests/",
+          "Doctrine\\ORM\\": "vendor/doctrine/orm/lib/Doctrine/ORM"
         }
 
+    },
+    "autoload-dev": {
+        "psr-4": { "Doctrine\\Tests\\": "vendor/doctrine/orm/tests/Doctrine/Tests" }
     },
     "minimum-stability": "dev",
     "require": {
