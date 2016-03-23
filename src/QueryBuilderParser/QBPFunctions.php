@@ -130,7 +130,7 @@ trait QBPFunctions
         $operatorMayBeDate = in_array('datetime', $this->operators[$rule->operator]['apply_to']);
         $firstValueLooksLikeDate = \DateTime::createFromFormat(
             $this->dateFormat,
-            is_array($values) ? $values[0] : $values[0]
+            is_array($values) ? $values[0] : $values
         );
 
         // nope, not a date. Return original value
@@ -139,8 +139,10 @@ trait QBPFunctions
         }
 
         // there are some dates, let's convert all of it to \DateTime
-        foreach ((array)$values as $key => $subValue) {
-            $values[$key] = \DateTime::createFromFormat($this->dateFormat, $subValue)->setTime(0, 0);
+        $values = (array)$values;
+        foreach ($values as $key => $subValue) {
+            $dateObj = \DateTime::createFromFormat($this->dateFormat, $subValue)->setTime(0, 0);
+            $values[$key] = $dateObj;
         }
 
         return count($values) == 1 ? $values[0] : $values;
