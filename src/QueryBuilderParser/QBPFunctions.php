@@ -308,7 +308,7 @@ trait QBPFunctions
             $query->setParameter($rule->field, $value);
         }
         elseif (in_array($rule->operator, ['is_null', 'is_not_null'])) {
-            if ($rule->operator == 'is_not_null') {
+            if ($rule->operator == 'is_null') {
                 $query->leftJoin('e.'.$rule->field, $rule->field);
             } else {
                 $query->innerJoin('e.'.$rule->field, $rule->field);
